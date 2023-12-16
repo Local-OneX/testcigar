@@ -1610,14 +1610,8 @@
             let code = KEY_TO_OPCODE[key];
             if (code !== undefined) wsSend(code);
             if (key === 'w') {
-			     if (settings.macro) {
-			         macroCooldown = 0;
-		         } else {
-			         macroCooldown = 1000 / 7;
-		         }
-                console.log(macroCooldown)
                 code = UINT8_CACHE[minionControlled ? 23 : 21];
-                macroIntervalID = setInterval(() => wsSend(code), macroCooldown);
+                macroIntervalID = setInterval(() => wsSend(code), settings.macro && 0 || macroCooldown);
                 wsSend(code);
             }
             if (key === ' ')
@@ -1648,14 +1642,7 @@
         soundsVolume = byId('soundsVolume');
 		splitMacro = byId('splitMacro');
         mainCanvas.focus();
-
-         if (settings.macro) {
-			 macroCooldown = 0;
-		 } else {
-			 macroCooldown = 1000 / 7;
-		 }
-        console.log(macroCooldown)
-
+ 
         loadSettings();
         window.addEventListener('beforeunload', storeSettings);
         document.addEventListener('wheel', handleScroll, {passive: true});
