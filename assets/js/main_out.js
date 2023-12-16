@@ -1635,6 +1635,7 @@
     }
 
     function init() {
+		console.log(settings)
         mainCanvas = document.getElementById('canvas');
         mainCtx = mainCanvas.getContext('2d');
         chatBox = byId('chat_textbox');
