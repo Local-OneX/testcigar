@@ -1438,7 +1438,6 @@
                 drawText(ctx, true, this.x, y, this.nameSize / 2, this.drawNameSize / 2, mass);
             }
         }
-		console.log(this)
     }
 
     function cacheCleanup() {
