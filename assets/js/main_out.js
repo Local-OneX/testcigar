@@ -1611,7 +1611,11 @@
             if (code !== undefined) wsSend(code);
             if (key === 'w') {
                 code = UINT8_CACHE[minionControlled ? 23 : 21];
-                macroIntervalID = setInterval(() => wsSend(code), settings.macro && 0 || macroCooldown);
+				let cooldown = 0;
+                if (!settings.macro) {
+                    cooldown = macroCooldown;
+                } 
+                macroIntervalID = setInterval(() => wsSend(code), cooldown);
                 wsSend(code);
             }
             if (key === ' ')
