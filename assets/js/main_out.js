@@ -594,7 +594,7 @@
 
     const knownSkins = new Map();
     const loadedSkins = new Map();
-    const macroCooldown = 1000 / 7;
+    const macroCooldown = 0; // 1000 / 7;
     const camera = {
         x: 0,
         y: 0,
@@ -619,6 +619,7 @@
     let mainCanvas = null;
     let mainCtx = null;
     let soundsVolume;
+	let splitMacro;
     let escOverlayShown = false;
     let isTyping = false;
     let chatBox = null;
@@ -657,6 +658,8 @@
         fillSkin: true,
         backgroundSectors: false,
         jellyPhysics: true,
+		splitMacro: 2,
+		macroSplit: false,
     };
     const pressed = {
         ' ': false,
@@ -1636,11 +1639,13 @@
         mainCtx = mainCanvas.getContext('2d');
         chatBox = byId('chat_textbox');
         soundsVolume = byId('soundsVolume');
+		splitMacro = byId('splitMacro');
         mainCanvas.focus();
 
         loadSettings();
         window.addEventListener('beforeunload', storeSettings);
         document.addEventListener('wheel', handleScroll, {passive: true});
+		byId('canvas').addEventListener('click', macroSplit)
         byId('play-btn').addEventListener('click', () => {
             const skin = settings.skin;
             sendPlay((skin ? `<${skin}>` : '') + settings.nick.substring(0, 16));
@@ -1728,6 +1733,21 @@
         drawGame();
         Logger.info(`Init done in ${Date.now() - LOAD_START}ms`);
     }
+	
+	function macroSplit() {
+		const split = parseFloat(splitMacro.value);
+		if (!settings.macroSplit || split == 0) {
+			return 0
+		} else {
+			let counter = 0;
+			let length = parseInt(split) || 1;
+			while (counter != length) {
+				wsSend(UINT8_CACHE[17])
+                counter = counter+1
+			}	
+       }	
+	}
+	
     window.setserver = (url) => {
         if (url === wsUrl && ws && ws.readyState <= WebSocket.OPEN) return;
         wsInit(url);
