@@ -588,7 +588,7 @@
         pingLoopStamp: null,
         canvas: document.createElement('canvas'),
         visible: false,
-        score: NaN,
+        score: 50000,
         maxScore: 0
     });
 
