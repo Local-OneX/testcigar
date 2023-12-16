@@ -594,7 +594,7 @@
 
     const knownSkins = new Map();
     const loadedSkins = new Map();
-    const macroCooldown = 0; // 1000 / 7;
+    const macroCooldown = 1000 / 7;
     const camera = {
         x: 0,
         y: 0,
@@ -659,7 +659,7 @@
         backgroundSectors: false,
         jellyPhysics: true,
 		splitMacro: 2,
-		macroSplit: false,
+		macro: false,
     };
     const pressed = {
         ' ': false,
@@ -1643,6 +1643,8 @@
 		splitMacro = byId('splitMacro');
         mainCanvas.focus();
 
+        macroCooldown = macro ? 0 : 1000 / 7;
+
         loadSettings();
         window.addEventListener('beforeunload', storeSettings);
         document.addEventListener('wheel', handleScroll, {passive: true});
@@ -1744,7 +1746,7 @@
 	function macroSplit() {
         console.log('macro split');
 		const split = parseFloat(splitMacro.value);
-		if (!settings.macroSplit || split == 0) {
+		if (!settings.macro || split == 0) {
 			return 0
 		} else {
 			let _ID2;
