@@ -1610,7 +1610,7 @@
             let code = KEY_TO_OPCODE[key];
             if (code !== undefined) wsSend(code);
             if (key === 'w') {
-			     if (settings.macro === true) {
+			     if (settings.macro) {
 			         macroCooldown = 0;
 		         } else {
 			         macroCooldown = 1000 / 7;
@@ -1649,11 +1649,11 @@
 		splitMacro = byId('splitMacro');
         mainCanvas.focus();
 
-         if (settings.macro === true) {
-			         macroCooldown = 0;
-		         } else {
-			         macroCooldown = 1000 / 7;
-		         }
+         if (settings.macro) {
+			 macroCooldown = 0;
+		 } else {
+			 macroCooldown = 1000 / 7;
+		 }
         console.log(macroCooldown)
 
         loadSettings();
