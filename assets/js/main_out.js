@@ -1610,7 +1610,8 @@
             let code = KEY_TO_OPCODE[key];
             if (code !== undefined) wsSend(code);
             if (key === 'w') {
-				macroCooldown = macro ? 0 : 1000 / 7;
+			    macroCooldown = settings.macro ? 0 : 1000 / 7;
+                console.log(macroCooldown)
                 code = UINT8_CACHE[minionControlled ? 23 : 21];
                 macroIntervalID = setInterval(() => wsSend(code), macroCooldown);
                 wsSend(code);
@@ -1644,7 +1645,8 @@
 		splitMacro = byId('splitMacro');
         mainCanvas.focus();
 
-        macroCooldown = macro ? 0 : 1000 / 7;
+        macroCooldown = settings.macro ? 0 : 1000 / 7;
+        console.log(macroCooldown)
 
         loadSettings();
         window.addEventListener('beforeunload', storeSettings);
