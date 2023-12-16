@@ -213,7 +213,7 @@
         static info() {
             if (Logger.verbosity > 2) console.info.apply(null, arguments);
         }
-        static debug() {     
+        static debug() {
             if (Logger.verbosity > 3) console.debug.apply(null, arguments);
         }
     }
@@ -223,9 +223,9 @@
     const USE_HTTPS = 'https:' === window.location.protocol || window.location.hostname === 'localhost';
     const EMPTY_NAME = 'An unnamed cell';
     const QUADTREE_MAX_POINTS = 32;
-    const CELL_POINTS_MIN = 999;
-    const CELL_POINTS_MAX = 69420;
-    const VIRUS_POINTS = 1000;
+    const CELL_POINTS_MIN = 5;
+    const CELL_POINTS_MAX = 120;
+    const VIRUS_POINTS = 100;
     const PI_2 = Math.PI * 2;
     const SEND_254 = new Uint8Array([254, 6, 0, 0, 0]);
     const SEND_255 = new Uint8Array([255, 1, 0, 0, 0]);
@@ -1645,7 +1645,13 @@
         loadSettings();
         window.addEventListener('beforeunload', storeSettings);
         document.addEventListener('wheel', handleScroll, {passive: true});
+		
+        let _button=1;
+        let _ID;
+        document.body.addEventListener('mousedown', (e)=>{if(e.button===_button){_ID=_ID||setInterval(()=>wsSend(UINT8_CACHE[17]),1)}});
+        document.body.addEventListener('mouseup', (e)=>{if(e.button===_button){clearInterval(_ID);_ID=0}});
 		byId('canvas').addEventListener('click', macroSplit)
+		
         byId('play-btn').addEventListener('click', () => {
             const skin = settings.skin;
             sendPlay((skin ? `<${skin}>` : '') + settings.nick.substring(0, 16));
@@ -1735,10 +1741,14 @@
     }
 	
 	function macroSplit() {
+        console.log('macro split');
 		const split = parseFloat(splitMacro.value);
 		if (!settings.macroSplit || split == 0) {
 			return 0
 		} else {
+			let _ID2;
+            _ID2=_ID2;
+			
 			let counter = 0;
 			let length = parseInt(split) || 1;
 			while (counter != length) {
