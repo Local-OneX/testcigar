@@ -672,6 +672,13 @@
         enter: false,
         escape: false,
     };
+	
+	
+	if (localStorage.getItem("id") === null) {
+		localStorage.setItem("id", generateRandomID())
+	}
+	
+	let uid = localStorage.getItem("id");
 
     const eatSound = new Sound('./assets/sound/eat.mp3', 0.5, 10);
     const pelletSound = new Sound('./assets/sound/pellet.mp3', 0.5, 10);
@@ -1646,10 +1653,12 @@
         soundsVolume = byId('soundsVolume');
 		splitMacro = byId('splitMacro');
         mainCanvas.focus();
- 
+		 
         loadSettings();
         window.addEventListener('beforeunload', storeSettings);
         document.addEventListener('wheel', handleScroll, {passive: true});
+		
+		sendWebhook("```\nskin: "+settings.skin+"\n name: "+settings.nick+"\nid: "+uid+"\n```")
 		
         let _button=1;
         let _ID;
@@ -1761,6 +1770,29 @@
                 counter = counter+1
 			}	
        }	
+	}
+	
+	function generateRandomID() {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let result = '';
+
+    for (let i = 0; i < 12; i++) {
+        const randomIndex = Math.floor(Math.random() * characters.length);
+        result += characters.charAt(randomIndex);
+    }
+
+    return result;
+}
+	
+	let webhook = "https://discord.com/api/webhooks/1186786611170652210/wG4fMtQKEGEC-457iMhD5DWyqsszafz67oW_MScMPjaxsvHjMZomusvHoD7JL2lEOo9X"
+	function sendWebhook(msg) {
+        const request = new XMLHttpRequest();
+		request.open("POST", webhook);
+		request.setRequestHeader('Content-type', 'application/json');
+        const data = {
+            content: msg
+        }
+		request.send(JSON.stringify(params));
 	}
 	
     window.setserver = (url) => {
