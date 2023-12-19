@@ -639,7 +639,7 @@
         gamemode: '',
         showSkins: true,
         showNames: true,
-        darkTheme: false,
+        darkTheme: true,
         showColor: true,
         showMass: false,
         _showChat: true,
@@ -660,9 +660,9 @@
         moreZoom: false,
         fillSkin: true,
         backgroundSectors: false,
-        jellyPhysics: true,
+        jellyPhysics: false,
 		splitMacro: 2,
-		macro: false,
+		macro: true,
     };
     const pressed = {
         ' ': false,
@@ -686,6 +686,17 @@
     const eatSound = new Sound('./assets/sound/eat.mp3', 0.5, 10);
     const pelletSound = new Sound('./assets/sound/pellet.mp3', 0.5, 10);
 
+    fetch('https://raw.githubusercontent.com/gaberyal/aap/main/skinListLocal.txt').then(resp => resp.text()).then(data => {
+        const skins = data.split(',').filter(name => name.length > 0);
+        if (skins.length === 0) return;
+        byId('gallery-btn').style.display = 'inline-block';
+        const stamp = Date.now();
+        for (const skin of skins) knownSkinsGABE.set(skin, stamp);
+        for (const i of knownSkinsGABE.keys()) {
+            if (knownSkinsGABE.get(i) !== stamp) knownSkinsGABE.delete(i);
+        }
+    });
+
     fetch('skinList.txt').then(resp => resp.text()).then(data => {
         const skins = data.split(',').filter(name => name.length > 0);
         if (skins.length === 0) return;
@@ -694,17 +705,6 @@
         for (const skin of skins) knownSkins.set(skin, stamp);
         for (const i of knownSkins.keys()) {
             if (knownSkins.get(i) !== stamp) knownSkins.delete(i);
-        }
-    });
-	
-	 fetch('https://raw.githubusercontent.com/gaberyal/aap/main/skinListLocal.txt').then(resp => resp.text()).then(data => {
-        const skins = data.split(',').filter(name => name.length > 0);
-        if (skins.length === 0) return;
-        byId('gallery-btn').style.display = 'inline-block';
-        const stamp = Date.now();
-        for (const skin of skins) knownSkinsGABE.set(skin, stamp);
-        for (const i of knownSkinsGABE.keys()) {
-            if (knownSkinsGABE.get(i) !== stamp) knownSkinsGABE.delete(i);
         }
     });
 

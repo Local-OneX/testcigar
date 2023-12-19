@@ -175,6 +175,14 @@ input[type=checkbox] {
 	vertical-align: middle;
 }
 
+/*#splitMacro {
+	display: none;
+	width: 100px;
+	height: 18px;
+	padding: 0;  
+	vertical-align: middle;
+}*/
+
 #settings label {
 	margin-right: 10px;
 	user-select: none;
