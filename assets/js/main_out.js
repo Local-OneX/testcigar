@@ -220,7 +220,7 @@
 
     const WEBSOCKET_URL = null;
     const SKIN_URL = './skins/';
-	const GABE_URL = 'https://github.com/gaberyal/gabeCigar/tree/main/skins';
+	const GABE_URL = 'https://raw.githubusercontent.com/gaberyal/aap/main/skins/';
     const USE_HTTPS = 'https:' === window.location.protocol || window.location.hostname === 'localhost';
     const EMPTY_NAME = 'An unnamed cell';
     const QUADTREE_MAX_POINTS = 32;
