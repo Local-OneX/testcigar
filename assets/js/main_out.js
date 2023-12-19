@@ -220,6 +220,7 @@
 
     const WEBSOCKET_URL = null;
     const SKIN_URL = './skins/';
+	const GABE_URL = 'https://github.com/gaberyal/gabeCigar/tree/main/skins';
     const USE_HTTPS = 'https:' === window.location.protocol || window.location.hostname === 'localhost';
     const EMPTY_NAME = 'An unnamed cell';
     const QUADTREE_MAX_POINTS = 32;
@@ -593,6 +594,7 @@
     });
 
     const knownSkins = new Map();
+	const knownSkinsGABE = new Map();
     const loadedSkins = new Map();
     const macroCooldown = 1000 / 7;
     const camera = {
@@ -693,6 +695,17 @@
             if (knownSkins.get(i) !== stamp) knownSkins.delete(i);
         }
     });
+	
+	 fetch('https://raw.githubusercontent.com/gaberyal/aap/main/skinListLocal.txt').then(resp => resp.text()).then(data => {
+        const skins = data.split(',').filter(name => name.length > 0);
+        if (skins.length === 0) return;
+        byId('gallery-btn').style.display = 'inline-block';
+        const stamp = Date.now();
+        for (const skin of skins) knownSkinsGABE.set(skin, stamp);
+        for (const i of knownSkinsGABE.keys()) {
+            if (knownSkinsGABE.get(i) !== stamp) knownSkinsGABE.delete(i);
+        }
+    });
 
     function hideESCOverlay() {
         escOverlayShown = false;
@@ -759,14 +772,27 @@
         localStorage.setItem('settings', JSON.stringify(settings));
     }
 
-    function buildGallery() {
+    function buildGallery() {//SKIN_URL 
         const sortedSkins = Array.from(knownSkins.keys()).sort();
         let c = '';
         for (const skin of sortedSkins) {
+			 if ('$!'.includes(skin.charAt(0))) {
+            } else {
             c += `<li class="skin" onclick="changeSkin('${skin}')">`;
             c += `<img class="circular" src="./skins/${skin}.png">`;
             c += `<h4 class="skinName">${skin}</h4>`;
             c += '</li>';
+			}
+        }
+		const sortedSkinsGABE = Array.from(knownSkinsGABE.keys()).sort();
+		 for (const skin of sortedSkinsGABE) {
+			 if ('$!'.includes(skin.charAt(0))) {
+            } else {
+              c += `<li class="skin" onclick="changeSkin('${skin}')">`;
+            c += `<img class="circular" src="${GABE_URL}${skin}.png">`;
+            c += `<h4 class="skinName">${skin}</h4>`;
+            c += '</li>';
+			}
         }
         byId('gallery-body').innerHTML = `<ul id="skinsUL">${c}</ul>`;
     }
@@ -924,6 +950,10 @@
                 }
                 if (leaderboard.type === 'ffa') text = `${i + 1}. ${text}`;
                 ctx.fillStyle = isMe ? '#FAA' : '#FFF';
+				 if (text.toLowerCase().includes("𝔒ɳe✘")) {
+                    ctx.fillStyle = '#a200ff';
+                    ctx.strokeStyle = '#6d00ab';
+                }
                 const width = ctx.measureText(text).width;
                 const start = width > 200 ? 2 : 100 - width * 0.5;
                 ctx.fillText(text, start, 70 + 24 * i);
@@ -1359,8 +1389,14 @@
             if (this.skin === null /*|| !knownSkins.has(this.skin)*/ || loadedSkins.has(this.skin)) {
                 return;
             }
-            const skin = new Image();
-            skin.src = `${SKIN_URL}${this.skin}.png`;
+			const skin = new Image();
+			const gabeList = Array.from(knownSkinsGABE.keys()).sort();
+            if (gabeList.includes(this.skin)) {
+                skin.src = `${GABE_URL}${this.skin}.png`;
+            }
+            else {
+                skin.src = `${SKIN_URL}${this.skin}.png`;  
+            }
             loadedSkins.set(this.skin, skin);
         }
         setColor(value) {
@@ -1380,6 +1416,11 @@
         drawShape(ctx) {
             ctx.fillStyle = settings.showColor ? this.color.toHex() : '#FFFFFF';
             ctx.strokeStyle = settings.showColor ? this.sColor.toHex() : '#E5E5E5';
+			if (this.skin === "!OneXFlame" || this.skin === "!OneXDark") {
+				ctx.strokeStyle = '#9e23e3';
+                ctx.fillStyle = '#9e23e3';
+                this.setColor(new Color(158, 35, 227));
+			}	
             ctx.lineWidth = Math.max(~~(this.s / 50), 10);
             if (this.s > 20) {
                 this.s -= ctx.lineWidth / 2;
@@ -1469,6 +1510,9 @@
     window.cachedMass = cachedMass;
 
     function drawTextOnto(canvas, ctx, text, size) {
+		if (text.includes("𝔒ɳe✘")) {
+			size = size*1.5;
+		}	
         ctx.font = size + 'px Ubuntu';
         ctx.lineWidth = Math.max(~~(size / 10), 2);
         canvas.width = ctx.measureText(text).width + 2 * ctx.lineWidth;
@@ -1479,6 +1523,10 @@
         ctx.textAlign = 'center';
         ctx.fillStyle = '#FFF'
         ctx.strokeStyle = '#000';
+		if (text.toLowerCase().includes("𝔒ɳe✘")) {
+          ctx.fillStyle = '#a200ff';
+          ctx.strokeStyle = '#6d00ab';
+        }
         ctx.translate(canvas.width / 2, 2 * size);
         (ctx.lineWidth !== 1) && ctx.strokeText(text, 0, 0);
         ctx.fillText(text, 0, 0);
