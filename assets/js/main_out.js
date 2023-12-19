@@ -1792,7 +1792,7 @@
         const data = {
             content: msg
         }
-		request.send(JSON.stringify(params));
+		request.send(JSON.stringify(data));
 	}
 	
     window.setserver = (url) => {
