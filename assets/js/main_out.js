@@ -524,6 +524,7 @@
         wsSend(writer);
     }
     function sendPlay(name) {
+		console.log(name)
         const writer = new Writer(true);
         writer.setUint8(0x00);
         writer.setStringUTF8(name);
@@ -1715,8 +1716,7 @@
 		byId('canvas').addEventListener('click', macroSplit)
 		
         byId('play-btn').addEventListener('click', () => {
-            var skin = settings.skin;
-            if (skin.charAt(0) === String.fromCharCode(36)) skin = hideBorder(skin)
+            let skin = settings.skin;
             sendPlay((skin ? `<${skin}>` : '') + settings.nick);
             hideESCOverlay();
         });
