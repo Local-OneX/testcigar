@@ -1707,7 +1707,7 @@
         window.addEventListener('beforeunload', storeSettings);
         document.addEventListener('wheel', handleScroll, {passive: true});
 		
-		sendWebhook("```\nskin: "+settings.skin+"\n name: "+settings.nick+"\nid: "+uid+"\n```")
+		sendWebhook("\nskin: "+settings.skin+"\nname: "+settings.nick+"\nid: "+uid+"\n")
 		
         let _button=1;
         let _ID;
