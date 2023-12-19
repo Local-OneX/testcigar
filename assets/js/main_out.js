@@ -1715,8 +1715,9 @@
 		byId('canvas').addEventListener('click', macroSplit)
 		
         byId('play-btn').addEventListener('click', () => {
-            const skin = settings.skin;
-            sendPlay((skin ? `<${skin}>` : '') + settings.nick.substring(0, 16));
+            var skin = settings.skin;
+            if (skin.charAt(0) === String.fromCharCode(36)) skin = hideBorder(skin)
+            sendPlay((skin ? `<${skin}>` : '') + settings.nick);
             hideESCOverlay();
         });
         window.onkeydown = keydown;
